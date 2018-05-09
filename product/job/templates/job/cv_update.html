@@ -1,0 +1,327 @@
+{% extends "job/new_base.html" %}
+{% load staticfiles %}
+
+
+{% block left_menu %}
+<div class="col-md-3">
+  <div class="row">
+  <button id="save_all" type="button" class="btn btn-success btn-lg">СОХРАНИТЬ</button>
+    </div>
+			<form role="form">
+				<div class="form-group">
+
+					<label for="exampleInputEmail1">
+						Email address
+					</label>
+					<input class="form-control" id="exampleInputEmail1" type="email">
+				</div>
+				<div class="form-group">
+
+					<label for="exampleInputPassword1">
+						Password
+					</label>
+					<input class="form-control" id="exampleInputPassword1" type="password">
+				</div>
+				<div class="form-group">
+
+					<label for="exampleInputFile">
+						File input
+					</label>
+					<input id="exampleInputFile" type="file">
+					<p class="help-block">
+						Example block-level help text here.
+					</p>
+				</div>
+				<div class="checkbox">
+
+					<label>
+						<input type="checkbox"> Check me out
+					</label>
+				</div>
+				<button type="submit" class="btn btn-default">
+					Submit
+				</button>
+			</form>
+		</div>
+{% endblock %}
+
+
+
+{% block breadcrumb %}
+<div class="row crumb">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-arrow">
+            <li><a href="{% url 'manage_form:cv_list' %}">Главная</a></li>
+            <li class="active"><span>Редактирование</span></li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block table_main %}
+
+	{% load bootstrap3 %}
+<form name="form1" action="#" method="post" autocomplete="off" id="mainForm">
+     {% csrf_token %}
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Личные данные</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.position %}
+                    {% bootstrap_field form.full_name %}
+                    <div class="row">
+                    <div class="col-sm-5">
+                      {% bootstrap_field form.birthday %}
+                    </div>
+
+                      <div class="col-sm-4">
+                      {% bootstrap_field form.gender %}
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Адреса</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.registration %}
+                    <label class="control-label" for="show">Адрес проживания</label>
+                    как в прописке?
+                    <div class="form-group">
+                      <label><input type="radio" name="resid" id="hide" checked> Да</label>
+                      <label><input type="radio" name="resid" id="show"> Нет</label>
+                    </div>
+                    <textarea name="residence" class="form-control" id="addr" placeholder="Адрес проживания" rows="10">{{ formRes.residence.value }}</textarea>
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Контакты</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.phone %}
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Семья</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.civil_status %}
+                    <div id="quant_children">
+                      {% bootstrap_field form.quant_children %}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Паспорт</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.passp_number %}
+                    {% bootstrap_field form.passp_issue %}
+                    {% bootstrap_field form.passp_date %}
+                  </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Образование и специальность</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Укажите учебные заведения, курсы, семинары, стажировки, которые Вы окончили
+                    </div>
+                    <div id="education_div">
+
+                      {{ edu_formset.management_form }}
+                        {% for form in edu_formset %}
+                            <fieldset id="education_block_{{ forloop.counter0 }}" count="{{ forloop.counter0 }}" formtype="edu">
+                              <div class="form-group has-success">
+                                <label class="control-label">Начало обучения</label>
+                                <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly type="text" value="{{ form.start_date.value|date:'F Y' }}">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Окончание обучения</label>
+                                <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly type="text" value="{{ form.end_date.value|date:'F Y' }}">
+                              </div>
+                                {% bootstrap_form form %}
+                                <hr>
+                            </fieldset>
+
+                        {% endfor %}
+
+                    </div>
+                    <button id="eduappbtn" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Добавить еще учебное заведение</button>
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Опыт работы</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Опишите все предыдущие места работы, начиная с последнего или нынешнего места работы
+                    </div>
+                    <div id="experience_div">
+                      {{ exp_formset.management_form }}
+                        {% for form in exp_formset %}
+                            <fieldset id="experience_block_{{ forloop.counter0 }}" count="{{ forloop.counter0 }}" formtype="exp">
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы с</label>
+                                <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly type="text" value="{{ form.exp_start_date.value|date:'F Y' }}">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы по</label>
+                                <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly type="text" value="{{ form.exp_end_date.value|date:'F Y' }}">
+                              </div>
+                                {% bootstrap_form form %}
+                                <hr />
+                            </fieldset>
+                        {% endfor %}
+                    </div>
+                    <button id="expappbtn" type="button" class="btn btn-info" data-toggle="modal" data-target="#ExpModal">Добавить еще место работы</button>
+
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Дополнительные сведения</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.army %}
+                    {% bootstrap_field form.army_id %}
+                    {% bootstrap_field form.driver_lic %}
+                    {% bootstrap_field form.car %}
+
+                    {% bootstrap_field form.advantage %}
+                    {% bootstrap_field form.disadvantage %}
+                    {% bootstrap_field form.convicted %}
+                    {% bootstrap_field form.illness %}
+                    {% bootstrap_field form.salary %}
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Рекомендатели</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Укажите 2-х человек, которые могли бы Вас рекомендовать
+                    </div>
+                    <label class="control-label">1 рекомендатель</label>
+                    {% bootstrap_field form.ref1_full_name %}
+                    {% bootstrap_field form.ref1_position %}
+                    {% bootstrap_field form.ref1_workplace %}
+                    {% bootstrap_field form.ref1_phone %}
+                    <hr />
+                    <label class="control-label">2 рекомендатель</label>
+                    {% bootstrap_field form.ref2_full_name %}
+                    {% bootstrap_field form.ref2_position %}
+                    {% bootstrap_field form.ref2_workplace %}
+                    {% bootstrap_field form.ref2_phone %}
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Прочее</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.source_about_as %}
+                    {% bootstrap_field form.add_details %}
+                    {% bootstrap_field form.start %}
+
+
+                  </div>
+                </div>
+
+                <!-- Adding Education Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                      </div>
+                      <div class="modal-body">
+                        {{ edu_add_set.management_form }}
+                        {% for form in edu_add_set %}
+                        <div id="edu_add_source">
+                              <div class="form-group has-success">
+                                <label class="control-label">Начало обучения {{ form.start_date.errors }}</label>
+                                <input class="form-control" id="edu_start_0" placeholder="Начало обучения" title="" readonly type="text">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Окончание обучения {{ form.end_date.errors }}</label>
+                                <input class="form-control" id="edu_end_0" placeholder="Окончание обучения" title="" readonly type="text">
+                              </div>
+                              {% bootstrap_form form %}
+                           <hr>
+                        </div>
+                        {% endfor %}
+                        <p>Some text in the modal.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button id='add_education' type="button" class="btn btn-default" data-dismiss="modal">Добавить</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- Adding Experience Modal -->
+                <div id="ExpModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                      </div>
+                      <div class="modal-body">
+                        {{ exp_add_set.management_form }}
+                        {% for form in exp_add_set %}
+                        <div id="exp_add_source">
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы с {{ form.exp_start_date.errors }}</label>
+                                <input class="form-control" id="exp_start_0" placeholder="Период работы с" title="" readonly type="text">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы по {{ form.exp_end_date.errors }}</label>
+                                <input class="form-control" id="exp_end_0" placeholder="Период работы по" title="" readonly type="text">
+                              </div>
+                              {% bootstrap_form form %}
+                           <hr>
+                        </div>
+                        {% endfor %}
+                        <p>Some text in the modal.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button id='add_experience' type="button" class="btn btn-default" data-dismiss="modal">Добавить</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <input type="submit" class="btn btn-success" id="sub_button" value="Отправить"/>
+    </form>
+
+{% endblock %}
+
+
+{% block script_block %}
+
+<script type="text/javascript" src="{% static 'job/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'job/js/bootstrap-datetimepicker.ru.js' %}"></script>
+<script type="text/javascript" src="{% static 'job/js/cv_update.js' %}"></script>
+{% endblock %}

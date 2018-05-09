@@ -1,0 +1,251 @@
+{% extends "job/new_base.html" %}
+{% load staticfiles %}
+
+
+
+{% block left_menu %}
+
+    <h4>Место заполнения:</h4>
+        <ul>
+            <li>{{ person.fill_location.describe }}</li>
+        </ul>
+        <h4><p>История статусов:</p></h4>
+        <div id="history">
+        {% for story in history %}
+        <div class="panel {% if forloop.last %}panel-success{% else %}panel-default{% endif %}">
+            <div class="panel-heading">
+                <h4 class="panel-title panel-xs">
+                  <a data-toggle="collapse" href="#info{{ forloop.counter }}">{% if forloop.last %}{% endif %}
+                      <strong>{{ story.status }}</strong><p>-{{ story.date|date:"d.m.Y H:m" }}</p></a>
+                </h4>
+            </div>
+            <div id="info{{ forloop.counter }}" class="panel-collapse collapse">
+              <ul class="list-group">
+                <li class="list-group-item">
+                    Установил статус:<p>{{ story.user_set.username }}</p>
+                </li>
+                <li class="list-group-item">Кому назначил:
+                    <p>{{ story.user_responsible.username }}</p>
+                </li>
+              </ul>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+
+
+    {% load bootstrap3 %}
+    <form action="{% url 'manage_form:ajax_change_state' person_id=person.id %}" method="POST" id="form_set_status" autocomplete="off">
+        <fieldset>
+        <legend>Установить</legend>
+        {% csrf_token %}
+            {% bootstrap_form change_status %}
+
+        <div class="form-group">
+            <button id="button__set_status" class="btn btn-primary">Установить</button>
+        </div>
+        </fieldset>
+    </form>
+
+{% endblock %}
+
+
+
+{% block breadcrumb %}
+<div class="row crumb">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-arrow">
+            <li><a href="{% url 'manage_form:cv_list' %}">Главная</a></li>
+            <li class="active"><span>Детальный вид</span></li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% block table_main %}
+<div class="row">
+<div class="main_panel">
+    <h3>{{ person.full_name }}</h3>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#person">Основное</a></li>
+  <li><a data-toggle="tab" href="#education">Образование</a></li>
+  <li><a data-toggle="tab" href="#experience">Опыт работы</a></li>
+  <li><a data-toggle="tab" href="#other">Прочее</a></li>
+</ul>
+<div class="tab-content">
+  <div id="person" class="tab-pane fade in active">
+      <h3></h3>
+      <div class="well">
+          <div class="row">
+              <div class="col-md-6">
+                  <p><strong>Должность:</strong> {{ person.position }}</p>
+                  <p><strong>Желаемая зарплата:</strong> {{ person.salary }}</p>
+                  <p><strong>Готов приступить к работе:</strong> {{ person.start }}</p>
+              </div>
+              <div class="col-md-6">
+                  <p><strong>Дата заполнения:</strong> {{ person.fill_date }}</p>
+                  <p><strong>Место заполнения:</strong> {{ person.fill_location }}</p>
+                  <p><strong>Узнал о вакансии от/из:</strong> {{ person.source_about_as }}</p>
+              </div>
+          </div>
+
+      </div>
+      <div class="well">
+          <div class="row">
+              <div class="col-md-6">
+                  <p><strong>Дата рождения:</strong> {{ person.birthday }}</p>
+                  <p><strong>Пол:</strong> {{ person.get_gender_display }}</p>
+                  <p><strong>Семейное положение:</strong> {{ person.civil_status }}</p>
+                  <p><strong>Кол-во детей:</strong> {{ person.quant_children }}</p>
+              </div>
+              <div class="col-md-6">
+                  <p><strong>Номер телефона:</strong> {{ person.phone }}</p>
+              </div>
+          </div>
+      </div>
+      <div class="well">
+        <h4 class="text-primary">Паспортные данные</h4>
+          <p><strong>Серия, номер паспорта:</strong> {{ person.passp_number }}</p>
+          <p><strong>Кем выдан:</strong> {{ person.passp_issue }}</p>
+          <p><strong>Дата выдачи:</strong> {{ person.passp_date }}</p>
+        <ul class="double">
+           <li>
+               <div class="panel panel-default">
+                <div class="panel-heading"><strong>Адрес прописки</strong></div>
+                <div class="panel-body">{{ person.registration }}</div>
+               </div>
+           </li>
+           <li>
+              <div class="panel panel-default">
+                <div class="panel-heading"><strong>Адрес проживания</strong></div>
+                <div class="panel-body">{% if person.residenceBool %}<span class="text-info text-uppercase">Адрес прописки совпадает с адресом проживания</span>
+                                        {% else %}{{ residence.residence }}{% endif %}</div>
+              </div>
+           </li>
+        </ul>
+      </div>
+      <div class="well">
+        <ul class="double">
+
+          <li>Служба в армии {% if person.army %}<span class="glyphicon glyphicon-ok"></span>
+              {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
+          <li>Военный билет {% if person.army_id %}<span class="glyphicon glyphicon-ok"></span>
+              {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
+          <li>Наличие автомобиля {% if person.car %}<span class="glyphicon glyphicon-ok"></span>
+              {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
+          <li>Водительское удостоверение {% if person.driver_lic %}<span class="glyphicon glyphicon-ok"></span>
+              {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
+          <li>Хронические заболевания {% if person.driver_lic %}<span class="glyphicon glyphicon-ok"></span>
+              {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
+          <li {% if person.convicted %}class="text-danger text-uppercase"{% endif %}>Уголовная ответственность
+              {% if person.convicted %}<span class="glyphicon glyphicon-ok"></span>
+              {%else%}<span class="glyphicon glyphicon-remove"></span>{%endif%}</li>
+        </ul>
+      </div>
+  </div>
+
+
+  <div id="education" class="tab-pane fade">
+    <ul>
+        {% for education in educations %}
+        <li class="main_li"><strong>{{ education.start_date|date:'F Y' }} - {{ education.end_date|date:'F Y' }}</strong>
+            <ul class="no_marker">
+                <li>
+                <div class="well">
+                    <p><strong>Название учебного заведения:</strong> &quot{{ education.name_institute }}&quot</p>
+                    <p><strong>Квалификация:</strong> {{ education.qualification }}</p>
+                </div>
+                </li>
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+  </div>
+
+
+  <div id="experience" class="tab-pane fade">
+    <ul>
+        {% for experience in experiences %}
+        <li class="main_li"><h4>{{ experience.exp_start_date|date:'F Y' }} - {{ experience.exp_end_date|date:'F Y' }}</h4>
+            <ul class="no_marker">
+                <li>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h4>Название предприятия: {{ experience.workplace }}</h4></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Должность:</strong> {{ experience.exp_position }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Зарплата:</strong> {{ experience.exp_salary }} грн</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading"><strong>Обязанности</strong></div>
+                                    <div class="panel-body">{{ experience.responsibility }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading"><strong>Причина увольнения</strong></div>
+                                    <div class="panel-body">{{ experience.reason_leaving }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+  </div>
+
+  <div id="other" class="tab-pane fade">
+      <div class="row first">
+          <div class="col-md-6">
+              <div class="panel panel-success">
+                <div class="panel-heading"><strong>Сильные стороны</strong></div>
+                <div class="panel-body">{{ person.advantage }}</div>
+              </div>
+          </div>
+          <div class="col-md-6">
+              <div class="panel panel-warning">
+                <div class="panel-heading"><strong>Слабые стороны</strong></div>
+                <div class="panel-body">{{ person.disadvantage }}</div>
+              </div>
+          </div>
+      </div>
+      <div class="panel panel-info">
+        <div class="panel-heading"><h4>Рекомендатель #1</h4></div>
+        <div class="panel-body">
+            <p><strong>ФИО:</strong> {{ person.ref1_full_name }}</p>
+            <p><strong>Должность:</strong> {{ person.ref1_position }}</p>
+            <p><strong>Место работы:</strong> {{ person.ref1_workplace }}</p>
+            <p><strong>Мобильный телефон:</strong> {{ person.ref1_phone }}</p>
+        </div>
+      </div>
+      <div class="panel panel-info">
+        <div class="panel-heading"><h4>Рекомендатель #2</h4></div>
+        <div class="panel-body">
+            <p><strong>ФИО:</strong> {{ person.ref2_full_name }}</p>
+            <p><strong>Должность:</strong> {{ person.ref2_position }}</p>
+            <p><strong>Место работы:</strong> {{ person.ref2_workplace }}</p>
+            <p><strong>Мобильный телефон:</strong> {{ person.ref2_phone }}</p>
+        </div>
+      </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block script_block %}
+<script src="{% static 'job/js/detail.js' %}"></script>
+{% endblock %}

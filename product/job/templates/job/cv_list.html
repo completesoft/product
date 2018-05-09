@@ -1,0 +1,73 @@
+{% extends "job/new_base.html" %}
+{% load staticfiles %}
+
+
+{% block breadcrumb %}
+<div class="row crumb">
+    <ol class="breadcrumb">
+        <li class="active"><a href="#">Главная</a></li>
+    </ol>
+</div>
+{% endblock %}
+
+
+{% block left_menu %}
+{% load bootstrap3 %}
+        <h3 class="left-menu__header"><strong>Фильтры:</strong></h3>
+        <hr>
+         <form action="{% url 'manage_form:cv_list' %}" autocomplete="off">
+            <div class="left-menu__content"><strong>Дата заполнения:</strong>
+                {% bootstrap_form filter %}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Показать</button>
+            </div>
+         </form>
+{% endblock %}
+
+
+{% block table_main %}
+<div class="row">
+        <div class="panel panel-primary main_panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">БАЗА РЕЗЮМЕ</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="cv_table">
+                        <thead>
+                          <th>Дата заполнения</th>
+                          <th>ФИО</th>
+                          <th>Должность</th>
+                          <th>Телефон</th>
+                          <th>Место заполнения</th>
+                          <th>Статус резюме</th>
+                          <th>Редактирование</th>
+                        </thead>
+                        <tbody>
+                          {% for person in persons %}
+                          <tr>
+                            <td>{{ person.fill_date|date:"d.m.Y" }}</td>
+                            <td><a href="{% url 'manage_form:cv_detail' person_id=person.id %}">{{ person.full_name }}</a></td>
+                            <td>{{ person.position }}</td>
+                            <td>{{ person.phone }}</td>
+                            <td>{{ person.fill_location.describe }}</td>
+                            <td>{{ person.last_state }}</td>
+                            <td><a href="{% url 'manage_form:cv_update' person_id=person.id %}"><img style="	width: 28px;" src="{% static 'job/img/edit.png' %}" alt="Редактировать"></a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+
+{% block script_block %}
+
+<script type="text/javascript" src="{% static 'job/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'job/js/bootstrap-datetimepicker.ru.js' %}"></script>
+<script src="{% static 'job/js/list.js' %}"></script>
+{% endblock %}

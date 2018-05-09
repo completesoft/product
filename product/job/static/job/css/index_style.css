@@ -1,0 +1,142 @@
+header {
+    width: 1140px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 25px;
+}
+
+header p{
+    font-size: 20px;
+}
+
+.content {
+    width: 1140px;
+    margin: 0 auto;
+}
+
+.block {
+    border: 2px solid #DD4814;
+    margin-bottom: 20px;
+}
+
+
+.block-header {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.content-row {
+    margin-left: 35px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.description {
+    margin-bottom: 10px;
+}
+
+.description_2{
+    margin-left: 20px;
+}
+
+.block-referrer{
+    text-align: right;
+}
+
+.col{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.footer{
+    text-align: left;
+    padding: 20px;
+}
+
+.block input[type="text"] {
+    width: 50%;
+    height: 38px;
+    padding: 2px 8px;
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.block textarea {
+    width: 50%;
+    height: 120px;
+    padding: 8px 8px;
+    border: 2px solid black;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.radio_lable {
+    font-size: 15px;
+}
+
+input:focus {
+  background: #F0F8FF;
+}
+
+textarea:focus {
+  background: #F0F8FF;
+}
+
+#error_birth, #error_passp, #error_start {
+    margin-bottom: 20px;
+    color:red;
+    font-size:15px;
+    position:absolute;
+    width:140px;
+}
+
+.error {
+    background: #DD4814;
+}
+
+#sub_button:hover{
+    color: #ffffff;
+    background-color: #37FF7D;
+    border-color: #37FF7D;
+}
+
+#sub_button{
+    width: 150px;
+    height: 40px;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#edu_add, #exp_add{
+    width: 130px;
+    height: 40px;
+    font-size: 18px;
+}
+
+
+.filler{
+    height: 150px;
+}
+
+select{
+    font-size: 20px;
+}
+
+.radio_lable, input[type="radio"]{
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+}
+
+
+.salary input[type="text"]{
+    width: 100px;
+    text-align: right;
+    font-size: 18px;
+}

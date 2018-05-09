@@ -1,0 +1,44 @@
+[
+{
+  "model": "job.cvstatusname",
+  "pk": 1,
+  "fields": {
+    "status": 0
+  }
+},
+{
+  "model": "job.cvstatusname",
+  "pk": 2,
+  "fields": {
+    "status": 1
+  }
+},
+{
+  "model": "job.cvstatusname",
+  "pk": 3,
+  "fields": {
+    "status": 2
+  }
+},
+{
+  "model": "job.cvstatusname",
+  "pk": 4,
+  "fields": {
+    "status": 3
+  }
+},
+{
+  "model": "job.cvstatusname",
+  "pk": 5,
+  "fields": {
+    "status": 4
+  }
+},
+{
+  "model": "job.cvstatusname",
+  "pk": 6,
+  "fields": {
+    "status": 5
+  }
+}
+]

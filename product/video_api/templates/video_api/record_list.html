@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load staticfiles %}
+	{% load video_api_extras %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Video report</title>
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-hover table-striped">
+				<thead>
+					<tr>
+                        <th>
+                            № п/п
+                        </th>
+						<th>
+							Магазин
+						</th>
+						<th>
+							Время начала (отсутствия движения)
+						</th>
+						<th>
+							Длительность (в минутах)
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for record in records %}
+					<tr>
+						<td>
+							{{ forloop.counter }}
+						</td>
+						<td>
+							{{ record.place_id }}
+						</td>
+						<td>
+							{{ record.time_start|date:"d.m.Y H:i:s" }}
+						</td>
+                        <td>
+                            {{ record.duration|sec_to_min }}
+                        </td>
+					</tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'candidate/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

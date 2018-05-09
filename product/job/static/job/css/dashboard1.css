@@ -1,0 +1,43 @@
+.main-content{
+    padding-right: 30px;
+}
+
+#id_cv_state input{
+    margin-top: 0px;
+    margin-left: -25px;
+}
+
+.row-body{
+    margin-top: 60px;
+}
+
+.left-menu{
+    position: fixed;
+    top: 60px;
+    left: 0px;
+    width: 23%;
+    overflow-y: auto;
+}
+
+.breadcrumb{
+   position: fixed;
+   top: 60px;
+   left: 25%;
+   width: 400px;
+   z-index: 100;
+}
+
+.row-content{
+    margin-top: 70px;
+}
+
+@media (max-width: 300px){
+    .left-menu{
+        top: 100px;
+        left: 0px;
+        width: 90%;
+    }
+    .breadcrumb, .row-content{
+        display: none;
+    }
+}

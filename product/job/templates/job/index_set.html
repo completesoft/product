@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+  <head>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'candidate/image/info.png' %}">
+
+    <title>Анкета кандидата</title>
+    <script type="text/javascript" src="{% static 'cv_manager/js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'cv_manager/js/index.js' %}"></script>
+
+    <link href="{% static 'cv_manager/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'cv_manager/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'cv_manager/css/form.css' %}" rel="stylesheet">
+
+    <script type="text/javascript" src="{% static 'cv_manager/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'cv_manager/js/bootstrap-datetimepicker.ru.js' %}"></script>
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+  </head>
+<body style="padding-bottom:400px;">
+
+  <div class="page-header">
+        <h1 class="text-center">Анкета кандидата</h1>
+  </div>
+
+<div class="col-sm-offset-3 col-sm-6 col-sm-offset-3" style="margin-bottom: 100px">
+  <div class="alert alert-warning">
+    <p><strong>Внимание!</strong> Все пункты обязательны для заполнения.</p>
+    <p>Мы не гарантируем Вам трудоустройство, но Ваша анкета будет храниться в
+      нашем кадровом банке, и мы обязательно свяжемся с Вами, если увидим в Вас
+       потенциального кандидата на конкретную вакансию.
+    </p>
+    <p>{{ form.errors }}</p>
+    <p>{{ form.non_form_errors }}</p>
+    <p></p>
+  </div>
+
+<div class="row">
+
+  {% load bootstrap3 %}
+
+</div>
+  <form name="form1" action="{% url 'fill_form:index' loc_id=loc_id %}" method="post" autocomplete="off" id="mainForm">
+     {% csrf_token %}
+      {{ form.mail_to_group }}
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Личные данные</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.position %}
+                    {% bootstrap_field form.full_name %}
+                    <div class="row">
+                    <div class="col-sm-5">
+                      {% bootstrap_field form.birthday %}
+                    </div>
+
+                      <div class="col-sm-4">
+                      {% bootstrap_field form.gender %}
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Адреса</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.registration %}
+                    <label class="control-label" for="show">Адрес проживания</label>
+                    как в прописке?
+                    <div class="form-group">
+                      <label><input type="radio" name="resid" id="hide" checked> Да</label>
+                      <label><input type="radio" name="resid" id="show"> Нет</label>
+                    </div>
+                    <textarea name="residence" class="form-control" id="addr" placeholder="Адрес проживания" rows="10"></textarea>
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Контакты</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.phone %}
+                  </div>
+                </div>
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Семья</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.civil_status %}
+                    <div id="quant_children">
+                      {% bootstrap_field form.quant_children %}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Паспорт</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.passp_number %}
+                    {% bootstrap_field form.passp_issue %}
+                    {% bootstrap_field form.passp_date %}
+                  </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Образование и специальность</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Укажите учебные заведения, курсы, семинары, стажировки, которые Вы окончили
+                    </div>
+                    <div id="education_div">
+                      {{ edu_formset.management_form }}
+                        {% for form in edu_formset %}
+                          {% if forloop.first %}
+                            <fieldset id="education_block">
+                              <div class="form-group has-success">
+                                <label class="control-label">Начало обучения</label>
+                                <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly type="text">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Окончание обучения</label>
+                                <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly type="text">
+                              </div>
+                                {% bootstrap_form form %}
+                                <hr />
+                            </fieldset>
+                          {% else %}
+                            <div class="form-group has-success">
+                              <label class="control-label">Начало обучения</label>
+                              <input class="form-control" id="edu_start_{{ forloop.counter0 }}" placeholder="Начало обучения" title="" readonly type="text">
+                            </div>
+                            <div class="form-group has-success">
+                              <label class="control-label">Окончание обучения</label>
+                              <input class="form-control" id="edu_end_{{ forloop.counter0 }}" placeholder="Окончание обучения" title="" readonly type="text">
+                            </div>
+                            {% bootstrap_form form %}
+                            <hr />
+                          {% endif %}
+                        {% endfor %}
+                    </div>
+                    <input id="add_education" type="button" class="btn btn-info" value="Добавить еще учебное заведение" />
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Опыт работы</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Опишите все предыдущие места работы, начиная с последнего или нынешнего места работы
+                    </div>
+                    <div id="exp_div">
+                      {{ exp_formset.management_form }}
+                        {% for form in exp_formset %}
+                          {% if forloop.first %}
+                            <fieldset id="exp_block">
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы с</label>
+                                <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly type="text">
+                              </div>
+                              <div class="form-group has-success">
+                                <label class="control-label">Период работы по</label>
+                                <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly type="text">
+                              </div>
+                                {% bootstrap_form form %}
+                                <hr />
+                            </fieldset>
+                          {% else %}
+                            <div class="form-group has-success">
+                              <label class="control-label">Период работы с</label>
+                              <input class="form-control" id="exp_start_{{ forloop.counter0 }}" placeholder="Период работы с" title="" readonly type="text">
+                            </div>
+                            <div class="form-group has-success">
+                              <label class="control-label">Период работы по</label>
+                              <input class="form-control" id="exp_end_{{ forloop.counter0 }}" placeholder="Период работы по" title="" readonly type="text">
+                            </div>
+                            {% bootstrap_form form %}
+                            <hr />
+                          {% endif %}
+                        {% endfor %}
+                    </div>
+                    <input id="add_exp" type="button" class="btn btn-info" value="Добавить еще место работы" />
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Дополнительные сведения</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.army %}
+                    {% bootstrap_field form.army_id %}
+                    {% bootstrap_field form.driver_lic %}
+                    {% bootstrap_field form.car %}
+
+                    {% bootstrap_field form.advantage %}
+                    {% bootstrap_field form.disadvantage %}
+                    {% bootstrap_field form.convicted %}
+                    {% bootstrap_field form.illness %}
+                    {% bootstrap_field form.salary %}
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Рекомендатели</div>
+                  <div class="panel-body">
+                    <div class="alert alert-warning">
+                      Укажите 2-х человек, которые могли бы Вас рекомендовать
+                    </div>
+                    <label class="control-label">1 рекомендатель</label>
+                    {% bootstrap_field form.ref1_full_name %}
+                    {% bootstrap_field form.ref1_position %}
+                    {% bootstrap_field form.ref1_workplace %}
+                    {% bootstrap_field form.ref1_phone %}
+                    <hr />
+                    <label class="control-label">2 рекомендатель</label>
+                    {% bootstrap_field form.ref2_full_name %}
+                    {% bootstrap_field form.ref2_position %}
+                    {% bootstrap_field form.ref2_workplace %}
+                    {% bootstrap_field form.ref2_phone %}
+
+                  </div>
+                </div>
+
+
+
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Прочее</div>
+                  <div class="panel-body">
+                    {% bootstrap_field form.source_about_as %}
+                    {% bootstrap_field form.add_details %}
+                    {% bootstrap_field form.start %}
+
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="alert alert-info">
+                  Я понимаю, что любое неправильное предоставление информации,
+                      либо неточности в данной анкете, могут привести к отказу в приеме на работу.
+                      Я несу полную ответственность за достоверность всей информации, указанной в анкете,
+                      и понимаю, что недостоверность информации может стать причиной моего дальнейшего увольнения
+                    <div class="form-group">
+                      <label><input type="checkbox" required /> Да</label>
+                    </div>
+                </div>
+
+
+
+                <input type="submit" class="btn btn-success" id="sub_button" value="Отправить"/>
+    </form>
+</div>
+
+
+
+
+
+</body>
+</html>

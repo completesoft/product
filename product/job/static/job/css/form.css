@@ -1,0 +1,9 @@
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+
+.form-control[readonly] {
+    background-color: transparent;
+}

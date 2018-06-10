@@ -1,0 +1,13 @@
+tfoot {
+    display: table-header-group;
+}
+
+.btn-lg {
+    line-height: 3;
+    margin-left: -40px;
+}
+
+.filter-form .label-left{
+    margin-left: 50px;
+}
+

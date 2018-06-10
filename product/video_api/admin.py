@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import MotionReg
 
-# Register your models here.
+admin.site.register(MotionReg)
+

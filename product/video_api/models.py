@@ -11,4 +11,4 @@ class MotionReg(models.Model):
         verbose_name_plural = 'События: движение'
 
     def __str__(self):
-        return '{} : {}'.format(self.place_id)
+        return '{}'.format(self.place_id)

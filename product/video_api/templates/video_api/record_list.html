@@ -12,42 +12,86 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link href="{% static 'candidate/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'job/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'video_api/css/dashboard.css' %}" rel="stylesheet">
 
   </head>
   <body>
 
-    <div class="container-fluid">
+  <div class="container-fluid">
+	<div class="row">
+        <div class="alert alert-info"><h3>Регистрация видео (статистика)</h3></div>
+    </div>
+    <div class="row">
+        <form class="form-horizontal filter-form" method="GET" action="">
+            {{ filter_form.non_field_errors }}
+    <div class="row">
+      <div class="col-sm-6">
+          <div class="form-group">
+            <label class="col-sm-2 control-label label-left" for="{{ filter_form.date_at.id_for_label }}">Дата &nbsp&nbsp&nbsp{{ filter_form.date_at.label }}:{{filter_form.date_at.errors}}</label>
+            <div class="col-sm-3">
+              {{ filter_form.date_at }}
+            </div>
+            <label class="col-sm-2 control-label" for="{{ filter_form.date_to.id_for_label }}">{{ filter_form.date_to.label }}:{{filter_form.date_to.errors}}</label>
+            <div class="col-sm-3">
+              {{ filter_form.date_to }}
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label label-left" for="{{ filter_form.place_id.id_for_label }}">{{ filter_form.place_id.label }}:{{filter_form.place_id.errors}}</label>
+            <div class="col-sm-8">
+              {{ filter_form.place_id }}
+            </div>
+          </div>
+      </div>
+      <div class="col-sm-6">
+          <button class="btn btn-info btn-lg">Поиск</button>
+      </div>
+    </div>
+
+
+
+
+
+          <!--<div class="form-group">-->
+              <!--<div class="col-sm-offset-1 col-sm-10">-->
+                <!--<button type="submit" class="btn btn-info">Поиск</button>-->
+              <!--</div>-->
+          <!--</div>-->
+        </form>
+    </div>
 	<div class="row">
 		<div class="col-md-12">
-			<table class="table table-hover table-striped">
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h4 class="panel-title">Отчет</h4>
+              </div>
+          <div class="panel-body">
+			<table class="table table-hover table-striped" id="table">
 				<thead>
 					<tr>
-                        <th>
-                            № п/п
-                        </th>
-						<th>
-							Магазин
-						</th>
-						<th>
-							Время начала (отсутствия движения)
-						</th>
-						<th>
-							Длительность (в минутах)
-						</th>
+                        <th>Дата</th>
+						<th>Магазин</th>
+						<th>Время начала (отсутствия движения)</th>
+						<th>Длительность (в минутах)</th>
 					</tr>
 				</thead>
+                <tfoot>
+                    <th><input type="text" placeholder="Search"/></th>
+                    <th><input type="text" placeholder="Search"/></th>
+                    <th><input type="text" placeholder="Search"/></th>
+                    <th><input type="text" placeholder="Search"/></th>
 				<tbody>
                     {% for record in records %}
 					<tr>
 						<td>
-							{{ forloop.counter }}
+							{{ record.time_start|date:"d.m.Y" }}
 						</td>
 						<td>
 							{{ record.place_id }}
 						</td>
 						<td>
-							{{ record.time_start|date:"d.m.Y H:i:s" }}
+							{{ record.time_start|date:"H:i:s" }}
 						</td>
                         <td>
                             {{ record.duration|sec_to_min }}
@@ -56,11 +100,15 @@
                     {% endfor %}
 				</tbody>
 			</table>
+          </div>
 		</div>
-	</div>
-</div>
-
-<script type="text/javascript" src="{% static 'candidate/js/jquery.js' %}"></script>
-<script type="text/javascript" src="{% static 'candidate/js/bootstrap.min.js' %}"></script>
-  </body>
+	  </div>
+    </div>
+  </div>
+<link href="{% static 'video_api/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<script type="text/javascript" src="{% static 'job/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'job/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'video_api/js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'video_api/js/tab_sorter.js' %}"></script>
+</body>
 </html>

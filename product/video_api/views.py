@@ -12,18 +12,13 @@ from django.conf import settings
 from .forms import VideoRecordFilterForm
 
 
-
 @csrf_exempt
 @api_view(['POST'])
 def recording(request):
-    print('POST PRINT', request.data)
     serializer = MotionregSerializer(data=request.data)
     if serializer.is_valid():
-        print('VALID', serializer.validated_data)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    print('BAD', serializer.data)
-    print('ERROR', serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -44,12 +39,6 @@ class RecordList(ListView):
         else:
             self.filter_form = VideoRecordFilterForm()
         return super(RecordList, self).get(request, *args, **kwargs)
-
-    # def get_queryset(self):
-    #     query_temp = super(RecordList, self).get_queryset()
-    #     if self.filter:
-    #         query_temp = query_temp.filter()
-            
 
     def get_context_data(self, **kwargs):
         context = super(RecordList, self).get_context_data(**kwargs)

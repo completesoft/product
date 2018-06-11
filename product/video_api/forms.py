@@ -15,6 +15,6 @@ class VideoRecordFilterForm(forms.Form):
                 self.add_error('date_at', msg)
 
     def filter_set(self):
-        preset = {'time_start__gte': 'date_at', 'time_start__lte': 'date_to', 'place_id__icontains': 'place_id'}
+        preset = {'time_start__date__gte': 'date_at', 'time_start__date__lte': 'date_to', 'place_id__icontains': 'place_id'}
         args = {k:self.cleaned_data[v] for k, v in preset.items() if v in self.changed_data and v in self.cleaned_data}
         return args
